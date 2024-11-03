@@ -8,6 +8,7 @@ import tensorflow as tf
 import sys
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import MultiLabelBinarizer
+from sklearn.impute import SimpleImputer
 from sklearn.feature_extraction import FeatureHasher
 from collections import Counter
 
@@ -335,6 +336,17 @@ df = df.drop(['location_name', 'location_categories', 'multiple_bias'], axis=1)
 df = df.drop(['bias_desc', 'bias_categories'], axis=1)
 #---------------- DROP COLUMNS THAT HAVE BEEN ENCODED ----------------#
 
+#------------------------------ IMPUTING -----------------------------#
+# Print statements useful for debugging
+# print("Missing values before imputation:")
+# print(df.isnull().sum())
+
+df = df.fillna(0)
+
+# print("\nMissing values after imputation:")
+# print(df.isnull().sum())
+#------------------------------ IMPUTING -----------------------------#
+
 #--------------------------- VISUALIZATIONS --------------------------#
 corr_matrix = df.corr(method='pearson')
 plt.figure(figsize=(12, 10))
@@ -349,5 +361,3 @@ plt.show()
 
 df.to_csv('processed_data.csv', index=False)
 #--------------------------- VISUALIZATIONS --------------------------#
-
-
