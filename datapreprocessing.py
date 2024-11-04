@@ -6,24 +6,24 @@ import numpy as np
 import keras
 import tensorflow as tf
 import sys
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.impute import SimpleImputer
 from sklearn.feature_extraction import FeatureHasher
 from collections import Counter
 
-
-
-#----------------------- CREATE THE DATAFRAME ------------------------#
+# ----------------------- CREATE THE DATAFRAME ------------------------#
 df = pd.read_csv('hate_crime_data 2.csv')
 # The below comments are useful for debugging / visualizing
-#print(df)
-#print(df.shape)
-#print(df.columns)
-#print(df.isnull().sum())
-#print(df.info())
-#print(df.describe())
-#print(df.head(10))
+# print(df)
+# print(df.shape)
+# print(df.columns)
+# print(df.isnull().sum())
+# print(df.info())
+# print(df.describe())
+# print(df.head(10))
 '''
 print(df.shape)
 #print(df.head(10))
@@ -32,16 +32,16 @@ column = df['victim_types']
 counter_summary = Counter(column)
 print(counter_summary)
 '''
-#----------------------- CREATE THE DATAFRAME ------------------------#
+# ----------------------- CREATE THE DATAFRAME ------------------------#
 
-#----------------- DROP OLD DATA & UNNEEDED COLUMNS ------------------#
+# ----------------- DROP OLD DATA & UNNEEDED COLUMNS ------------------#
 df = df[df['data_year'] >= 2000]
 print(df.isnull().sum())
 df = df.drop(['pug_agency_name',
-              'pub_agency_unit', 
-              'agency_type_name', 
-              'state_abbr', 
-              'incident_id', 
+              'pub_agency_unit',
+              'agency_type_name',
+              'state_abbr',
+              'incident_id',
               'ori',
               'offender_race',
               'offender_ethnicity',
@@ -49,24 +49,26 @@ df = df.drop(['pug_agency_name',
               'division_name',
               'region_name'], axis=1)
 df = df.dropna(subset=['population_group_description'])
-#----------------- DROP OLD DATA & UNNEEDED COLUMNS ------------------#
+# ----------------- DROP OLD DATA & UNNEEDED COLUMNS ------------------#
 
-#--------------- ENCODE DATE INTO NUMERICAL CATEGORIES ---------------#
+# --------------- ENCODE DATE INTO NUMERICAL CATEGORIES ---------------#
 df['incident_year'] = pd.to_datetime(df['incident_date']).dt.year
 df['incident_month'] = pd.to_datetime(df['incident_date']).dt.month
 df['incident_day'] = pd.to_datetime(df['incident_date']).dt.day
-#--------------- ENCODE DATE INTO NUMERICAL CATEGORIES ---------------#
+# --------------- ENCODE DATE INTO NUMERICAL CATEGORIES ---------------#
 
-#------------------ ENCODE MUTIPLE OFFENSE AND BIAS ------------------#
+# ------------------ ENCODE MUTIPLE OFFENSE AND BIAS ------------------#
 df['multiple_offense'] = df['multiple_offense'].map({'M': 1, 'S': 0})
 df['multiple_bias'] = df['multiple_bias'].map({'M': 1, 'S': 0})
 
 # Map 'M' to 1 and 'S' to 0 in multiple offense and bias columns
 df['multiple_offense'] = df['multiple_offense'].map({'M': 1, 'S': 0})
 df['multiple_bias'] = df['multiple_bias'].map({'M': 1, 'S': 0})
-#------------------ ENCODE MUTIPLE OFFENSE AND BIAS ------------------#
 
-#------------------- ENCODE THE POPULATION GROUPS --------------------#
+
+# ------------------ ENCODE MUTIPLE OFFENSE AND BIAS ------------------#
+
+# ------------------- ENCODE THE POPULATION GROUPS --------------------#
 def classify_population_group(category):
     if '1,000,000 or over' in category or '500,000 thru 999,999' in category:
         return 'Large_City'
@@ -79,14 +81,16 @@ def classify_population_group(category):
     else:
         return 'Other'
 
+
 df['population_group_class'] = df['population_group_description'].apply(classify_population_group)
 df = pd.get_dummies(df, columns=['population_group_class'])
 for col in df.filter(like='population_group_class_').columns:
     df[col] = df[col].astype(int)
-#------------------- ENCODE THE POPULATION GROUPS --------------------#
+# ------------------- ENCODE THE POPULATION GROUPS --------------------#
 
-#------------------------ ENCODE VICTIM TYPES ------------------------#
+# ------------------------ ENCODE VICTIM TYPES ------------------------#
 df = df.dropna(subset=['victim_types'])
+
 
 def classify_victim_type(victim):
     components = victim.split(';')
@@ -96,24 +100,25 @@ def classify_victim_type(victim):
         return 'Unknown'
     else:
         return 'Mixed_Entity'
-    
+
+
 df['victim_type_class'] = df['victim_types'].apply(classify_victim_type)
 df = pd.get_dummies(df, columns=['victim_type_class'])
 for col in df.filter(like='victim_type_class_').columns:
     df[col] = df[col].astype(int)
-#------------------------ ENCODE VICTIM TYPES ------------------------#
+# ------------------------ ENCODE VICTIM TYPES ------------------------#
 
-#-------------------------- ENCODING STATES --------------------------#
+# -------------------------- ENCODING STATES --------------------------#
 le = LabelEncoder()
 df['state_encoded'] = le.fit_transform(df['state_name'])
-#-------------------------- ENCODING STATES --------------------------#
+# -------------------------- ENCODING STATES --------------------------#
 
-#----------- FILLING NAN VALUES WITH 0 FOR NUMERIC COLUMNS -----------#
+# ----------- FILLING NAN VALUES WITH 0 FOR NUMERIC COLUMNS -----------#
 numeric_columns = ['adult_victim_count', 'juvenile_victim_count', 'adult_offender_count', 'juvenile_offender_count']
 df[numeric_columns] = df[numeric_columns].fillna(0)
-#----------- FILLING NAN VALUES WITH 0 FOR NUMERIC COLUMNS -----------#
+# ----------- FILLING NAN VALUES WITH 0 FOR NUMERIC COLUMNS -----------#
 
-#----------------------GROUP OFFENSE CATEGORIES ----------------------#
+# ----------------------GROUP OFFENSE CATEGORIES ----------------------#
 offense_category_map = {
     'Aggravated Assault': 'offense_name_ViolentCrime',
     'All Other Larceny': 'offense_name_PropertyCrime',
@@ -169,6 +174,7 @@ offense_category_map = {
     'Federal Liquor Offenses': 'offense_name_OtherCrime',
 }
 
+
 def map_offenses_to_categories(offenses):
     offense_list = offenses.split(';')
     categories = set()
@@ -178,6 +184,7 @@ def map_offenses_to_categories(offenses):
         categories.add(category)
     return list(categories)
 
+
 df['offense_categories'] = df['offense_name'].apply(map_offenses_to_categories)
 
 mlb = MultiLabelBinarizer()
@@ -185,9 +192,9 @@ cols = mlb.fit_transform(df['offense_categories'])
 
 temp = pd.DataFrame(cols, columns=mlb.classes_, index=df.index)
 df = pd.concat([df, temp], axis=1)
-#----------------------GROUP OFFENSE CATEGORIES ----------------------#
+# ----------------------GROUP OFFENSE CATEGORIES ----------------------#
 
-#------------------ GROUP LOCATION NAME CATEGORIES -------------------#
+# ------------------ GROUP LOCATION NAME CATEGORIES -------------------#
 location_category_map = {
     'Residence/Home': 'location_name_Residential',
     'Hotel/Motel/Etc.': 'location_name_Residential',
@@ -237,6 +244,7 @@ location_category_map = {
 
 }
 
+
 def map_locations_to_categories(location_str):
     location_list = location_str.split(';')
     categories = set()
@@ -246,6 +254,7 @@ def map_locations_to_categories(location_str):
         categories.add(category)
     return list(categories)
 
+
 df['location_categories'] = df['location_name'].apply(map_locations_to_categories)
 
 mlb = MultiLabelBinarizer()
@@ -253,9 +262,9 @@ mlb = MultiLabelBinarizer()
 cols = mlb.fit_transform(df['location_categories'])
 temp = pd.DataFrame(cols, columns=mlb.classes_, index=df.index)
 df = pd.concat([df, temp], axis=1)
-#------------------ GROUP LOCATION NAME CATEGORIES -------------------#
+# ------------------ GROUP LOCATION NAME CATEGORIES -------------------#
 
-#----------------- GROUP BIAS DESCRIPTION CATEGORIES -----------------#
+# ----------------- GROUP BIAS DESCRIPTION CATEGORIES -----------------#
 bias_category_map = {
     # Race/Ethnicity/Ancestry Biases
     'Anti-Black or African American': 'bias_desc_Race',
@@ -307,6 +316,7 @@ bias_category_map = {
     # Any biases not explicitly mapped will be categorized as 'bias_desc_Other'
 }
 
+
 def map_biases_to_categories(bias_str):
     bias_list = bias_str.split(';')
     categories = set()
@@ -323,9 +333,9 @@ mlb = MultiLabelBinarizer()
 bias_dummies = mlb.fit_transform(df['bias_categories'])
 bias_dummies_df = pd.DataFrame(bias_dummies, columns=mlb.classes_, index=df.index)
 df = pd.concat([df, bias_dummies_df], axis=1)
-#----------------- GROUP BIAS DESCRIPTION CATEGORIES -----------------#
+# ----------------- GROUP BIAS DESCRIPTION CATEGORIES -----------------#
 
-#---------------- DROP COLUMNS THAT HAVE BEEN ENCODED ----------------#
+# ---------------- DROP COLUMNS THAT HAVE BEEN ENCODED ----------------#
 df = df.drop('data_year', axis=1)
 df = df.drop('victim_types', axis=1)
 df = df.drop('population_group_description', axis=1)
@@ -334,9 +344,9 @@ df = df.drop('incident_date', axis=1)
 df = df.drop(['offense_name', 'offense_categories', 'multiple_offense'], axis=1)
 df = df.drop(['location_name', 'location_categories', 'multiple_bias'], axis=1)
 df = df.drop(['bias_desc', 'bias_categories'], axis=1)
-#---------------- DROP COLUMNS THAT HAVE BEEN ENCODED ----------------#
+# ---------------- DROP COLUMNS THAT HAVE BEEN ENCODED ----------------#
 
-#------------------------------ IMPUTING -----------------------------#
+# ------------------------------ INPUTING -----------------------------#
 # Print statements useful for debugging
 # print("Missing values before imputation:")
 # print(df.isnull().sum())
@@ -345,9 +355,18 @@ df = df.fillna(0)
 
 # print("\nMissing values after imputation:")
 # print(df.isnull().sum())
-#------------------------------ IMPUTING -----------------------------#
+# ------------------------------ INPUTING -----------------------------#
 
-#--------------------------- VISUALIZATIONS --------------------------#
+def predict_logistic_regression(X, y):
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=10)
+    logistic_regression = LogisticRegression(random_state=10)
+    logistic_regression.fit(X_train, y_train)
+    y_prediction = logistic_regression.predict(X_test)
+    return y_prediction
+
+log = predict_logistic_regression(df.index, cols)
+
+# --------------------------- VISUALIZATIONS --------------------------#
 corr_matrix = df.corr(method='pearson')
 plt.figure(figsize=(12, 10))
 plt.imshow(corr_matrix, cmap='coolwarm', interpolation='nearest')
@@ -357,7 +376,8 @@ plt.xticks(ticks, corr_matrix.columns, rotation=90)
 plt.yticks(ticks, corr_matrix.columns)
 plt.title('Pearson Correlation Matrix')
 plt.tight_layout()
+plt.imshow(log, cmap='coolwarm', interpolation='nearest')
 plt.show()
 
 df.to_csv('processed_data.csv', index=False)
-#--------------------------- VISUALIZATIONS --------------------------#
+# --------------------------- VISUALIZATIONS --------------------------#
