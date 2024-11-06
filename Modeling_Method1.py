@@ -62,8 +62,7 @@ y_pred_brf = brf_model.predict(X_test)
 print("\nBalanced Random Forest Model Performance:")
 print(classification_report(y_test, y_pred_brf, zero_division=0))
 print("Accuracy:", accuracy_score(y_test, y_pred_brf))
-
-pickle.dump(brf_model, open("InitialBRFModel", 'wb'))
+pickle.dump(brf_model, open("InitialBRFModel.pickle", 'wb'))
 
 importances = brf_model.feature_importances_
 feature_names = X_train_resampled.columns
@@ -95,7 +94,7 @@ print("\nBalanced Random Forest Model Performance after Removing 4 Least Importa
 print(classification_report(y_test, y_pred_brf_reduced, zero_division=0))
 accuracy_after = accuracy_score(y_test, y_pred_brf_reduced)
 print("Accuracy:", accuracy_after)
-pickle.dump(brf_model_reduced, open("NewBRFModel", 'wb'))
+pickle.dump(brf_model_reduced, open("NewBRFModel.pickle", 'wb'))
 #---------------------- FEATURE REDUCTION MODEL ----------------------#
 
 

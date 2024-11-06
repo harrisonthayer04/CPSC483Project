@@ -1,0 +1,184 @@
+Number of Features: 46
+Accuracy: 0.8520469168137562
+Macro F1-score: 0.5480705873544128
+
+Number of Features: 45
+Accuracy: 0.8512497864829471
+Macro F1-score: 0.5554675574792413
+
+Number of Features: 44
+Accuracy: 0.8530717986676536
+Macro F1-score: 0.5515795077399801
+
+Number of Features: 43
+Accuracy: 0.8530433297272676
+Macro F1-score: 0.5490956963475281
+
+Number of Features: 42
+Accuracy: 0.8537835221773046
+Macro F1-score: 0.5511532562991198
+
+Number of Features: 41
+Accuracy: 0.8532426123099698
+Macro F1-score: 0.554373983848089
+
+Number of Features: 40
+Accuracy: 0.852673233502249
+Macro F1-score: 0.5497583393347261
+
+Number of Features: 39
+Accuracy: 0.8529579229061094
+Macro F1-score: 0.5495701916465369
+
+Number of Features: 38
+Accuracy: 0.8525593577407049
+Macro F1-score: 0.5498579293760075
+
+Number of Features: 37
+Accuracy: 0.8525593577407049
+Macro F1-score: 0.5481774575163263
+
+Number of Features: 36
+Accuracy: 0.851933041052212
+Macro F1-score: 0.5502948166404773
+
+Number of Features: 35
+Accuracy: 0.8517906963502818
+Macro F1-score: 0.5478355216433101
+
+Number of Features: 34
+Accuracy: 0.8518761031714399
+Macro F1-score: 0.5501349494640115
+
+Number of Features: 33
+Accuracy: 0.8518761031714399
+Macro F1-score: 0.5497315372595739
+
+Number of Features: 32
+Accuracy: 0.8517337584695097
+Macro F1-score: 0.5520374815940963
+
+Number of Features: 31
+Accuracy: 0.8511074417810169
+Macro F1-score: 0.5467563763035032
+
+Number of Features: 30
+Accuracy: 0.850452656152138
+Macro F1-score: 0.5468119465312407
+
+Number of Features: 29
+Accuracy: 0.8502533735694358
+Macro F1-score: 0.5492302015084725
+
+Number of Features: 28
+Accuracy: 0.8496270568809429
+Macro F1-score: 0.5479923446997554
+
+Number of Features: 27
+Accuracy: 0.849712463702101
+Macro F1-score: 0.5524688889455828
+
+Number of Features: 26
+Accuracy: 0.8487445197289757
+Macro F1-score: 0.5523737056426267
+
+Number of Features: 25
+Accuracy: 0.8496270568809429
+Macro F1-score: 0.5515336312424545
+
+Number of Features: 24
+Accuracy: 0.8486021750270455
+Macro F1-score: 0.5508678477182553
+
+Number of Features: 23
+Accuracy: 0.8479473893981666
+Macro F1-score: 0.5477444853404967
+
+Number of Features: 22
+Accuracy: 0.8456129362865115
+Macro F1-score: 0.5542381421453915
+
+Number of Features: 21
+Accuracy: 0.8454136537038092
+Macro F1-score: 0.5463184057107286
+
+Number of Features: 20
+Accuracy: 0.8448442748960884
+Macro F1-score: 0.545595765820666
+
+Number of Features: 19
+Accuracy: 0.8441894892672095
+Macro F1-score: 0.5442239310549853
+
+Number of Features: 18
+Accuracy: 0.8422536013209588
+Macro F1-score: 0.5462504522746101
+
+Number of Features: 17
+Accuracy: 0.8412571884074475
+Macro F1-score: 0.5365381954211673
+
+Number of Features: 16
+Accuracy: 0.8408301543016569
+Macro F1-score: 0.5392492490667669
+
+Number of Features: 15
+Accuracy: 0.8389512042361783
+Macro F1-score: 0.540722528072758
+
+Number of Features: 14
+Accuracy: 0.836502875362979
+Macro F1-score: 0.536112827346013
+
+Number of Features: 13
+Accuracy: 0.8295279849683995
+Macro F1-score: 0.5334228036421663
+
+Number of Features: 12
+Accuracy: 0.8260263053009167
+Macro F1-score: 0.5363997225085759
+
+Number of Features: 11
+Accuracy: 0.8209018960314297
+Macro F1-score: 0.5293081542177346
+
+Number of Features: 10
+Accuracy: 0.8125889654387064
+Macro F1-score: 0.5224611596179477
+
+Number of Features: 9
+Accuracy: 0.8111370494790184
+Macro F1-score: 0.5226675168587376
+
+Number of Features: 8
+Accuracy: 0.8030518704093834
+Macro F1-score: 0.5116922097849856
+
+Number of Features: 7
+Accuracy: 0.7870238569720435
+Macro F1-score: 0.5054425154268355
+
+Number of Features: 6
+Accuracy: 0.6993964584638159
+Macro F1-score: 0.45779020679245475
+
+Number of Features: 5
+Accuracy: 0.6394408700108182
+Macro F1-score: 0.43013379161549387
+
+Number of Features: 4
+Accuracy: 0.4110060923532426
+Macro F1-score: 0.3201729804194752
+
+Number of Features: 3
+Accuracy: 0.33977680350737344
+Macro F1-score: 0.30781888148332426
+
+Number of Features: 2
+Accuracy: 0.301315265045835
+Macro F1-score: 0.29088475858887686
+
+Number of Features: 1
+Accuracy: 0.2869953880316575
+Macro F1-score: 0.14656437111966086
+
