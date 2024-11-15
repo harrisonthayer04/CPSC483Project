@@ -68,7 +68,7 @@ def predict_balanced_random_forest(x, Y):
 
 
 def predict_logistic_regression(x, Y, z=None):
-    logistic_regression = LogisticRegression(solver='saga', max_iter=2000)
+    logistic_regression = LogisticRegression(solver='saga', max_iter=1000)
     logistic_regression.fit(x, Y)
     if z is not None:
         y_prediction = logistic_regression.predict(z)
@@ -85,7 +85,7 @@ def plot_confusion_matrix(y_true, y_pred, title):
     disp = ConfusionMatrixDisplay(confusion_matrix=cm)
     disp.plot(cmap='Blues', values_format='d')
     plt.title(title)
-    plt.show()
+    # plt.show()
 
 print("Models before using SMOTE:")
 
